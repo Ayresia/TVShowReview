@@ -4,22 +4,14 @@ from ..models import Show, ReviewScore
 
 @show.route("/<int:id>")
 def get_show(id):
-    show = Show().get_show(id)
+    show_response = Show().get_show(id)
     
-    positive_reviews, negative_reviews, neutral_reviews = 0, 0, 0 
-
-    for review in show.reviews:
-        match review.score:
-            case ReviewScore.POSITIVE: positive_reviews += 1
-            case ReviewScore.NEGATIVE: negative_reviews += 1
-            case ReviewScore.NEUTRAL: neutral_reviews += 1
-            
     return render_template(
         'show.html',
-        show=show,
-        positive_reviews=positive_reviews,
-        negative_reviews=negative_reviews,
-        neutral_reviews=neutral_reviews
+        show=show_response.show,
+        positive_reviews=show_response.positive_reviews,
+        negative_reviews=show_response.negative_reviews,
+        neutral_reviews=show_response.neutral_reviews
     )
 
 @show.route("/<int:id>/reviews")
