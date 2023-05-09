@@ -12,6 +12,17 @@ class MetacriticProvider:
         self.session.headers.update(
             {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36'})
 
+    def try_remove_image_size(self, url: str) -> str:
+        from re import sub
+        sanitzed_url = sub(r'-(\d{2})', '', url)
+
+        request = self.session.get(sanitzed_url)
+
+        if request.status_code == 200:
+            return sanitzed_url
+
+        return url
+
     def get_critic_reviews(self, show_id: int, provider_id: str) -> list:
         try:
             request = self.session.get(f'{self.BASE_URL}/tv/{provider_id}/critic-reviews')
@@ -51,7 +62,7 @@ class MetacriticProvider:
 
                 show.provider_id = title_element.get('href').replace('/tv/', '')
                 show.title = title_element.text.strip()
-                show.thumbnail = tv_show.find('img').get('src')
+                show.thumbnail = self.try_remove_image_size(tv_show.find('img').get('src'))
 
                 result.append(show)
 
