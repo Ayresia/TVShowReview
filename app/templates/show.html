@@ -79,7 +79,11 @@
                         {% for review in show.reviews[:5] %}
                             <div class="flex border-gray-500 border-[3px] rounded-lg p-5 items-center">
                                 <div>
-                                    <!-- add icon here -->
+                                    <p class="text-5xl pb-2">
+                                        {% if review.score.name == "POSITIVE" %} &#x1f44d;
+                                        {% elif review.score.name == "NEGATIVE" %} &#x1f44e;
+                                        {% else %} &#x1f937; {% endif %}
+                                    </p>
                                     <p class="font-medium text-lg text-gray-500">{{ review.created_by.name.capitalize() }} Review</p>
                                     <p class="font-medium text-lg">{{ review.text }}</p>
                                 </div>

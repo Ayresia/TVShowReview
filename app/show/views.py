@@ -1,10 +1,10 @@
 from flask import render_template
 from . import show
-from ..models import Show, ReviewScore
+from ..models import Show
 
 @show.route("/<int:id>")
 def get_show(id):
-    show_response = Show().get_show(id)
+    show_response = Show().get_show(id, True)
     
     return render_template(
         'show.html',
@@ -16,5 +16,5 @@ def get_show(id):
 
 @show.route("/<int:id>/reviews")
 def get_all_show_reviews(id):
-    show = Show().get_show(id)
-    return render_template('show-reviews.html', show=show)
+    show_response = Show().get_show(id, False)
+    return render_template('show-reviews.html', show=show_response.show)

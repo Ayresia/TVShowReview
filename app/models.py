@@ -36,7 +36,7 @@ class Show(db.Model):
     reviews = db.relationship('Review', backref='show', lazy=True)
     genres = db.relationship('Genre', backref='show', lazy=True)
 
-    def get_show(self, id: int):
+    def get_show(self, id: int, count_reviews: bool):
         show: Show = db.session.query(Show).filter_by(id=id).first()
 
         if not show.reviews:
@@ -49,24 +49,23 @@ class Show(db.Model):
 
         positive_reviews, negative_reviews, neutral_reviews = 0, 0, 0
 
-        for review in show.reviews:
-            match review.score:
-                case ReviewScore.POSITIVE: positive_reviews += 1
-                case ReviewScore.NEGATIVE: negative_reviews += 1
-                case ReviewScore.NEUTRAL: neutral_reviews += 1
+        if count_reviews or show.overall_score is None:
+            for review in show.reviews:
+                match review.score:
+                    case ReviewScore.POSITIVE: positive_reviews += 1
+                    case ReviewScore.NEGATIVE: negative_reviews += 1
+                    case ReviewScore.NEUTRAL: neutral_reviews += 1
 
-        old_overall_score = show.overall_score
+        if show.overall_score is None:
+            if positive_reviews > negative_reviews:
+                show.overall_score = ReviewScore.POSITIVE
+            elif negative_reviews > positive_reviews:
+                show.overall_score = ReviewScore.NEGATIVE
+            elif neutral_reviews > positive_reviews and neutral_reviews > negative_reviews:
+                show.overall_score = ReviewScore.NEUTRAL
+            else:
+                show.overall_score = ReviewScore.UNKNOWN
 
-        if positive_reviews > negative_reviews:
-            show.overall_score = ReviewScore.POSITIVE
-        elif negative_reviews > positive_reviews:
-            show.overall_score = ReviewScore.NEGATIVE
-        elif neutral_reviews > positive_reviews and neutral_reviews > negative_reviews:
-            show.overall_score = ReviewScore.NEUTRAL
-        else:
-            show.overall_score = ReviewScore.UNKNOWN
-
-        if old_overall_score is not show.overall_score:
             db.session.commit()
 
         return GetShowResponse(show, positive_reviews, negative_reviews, neutral_reviews) 
