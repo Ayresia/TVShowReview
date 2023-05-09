@@ -1,10 +1,13 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    db.init_app(app)
+    app.config.from_object('config.Config')
+
+    from app.database import init_db
+    init_db(app)
+
+    from .show import show as show_blueprint
+    app.register_blueprint(show_blueprint)
 
     return app

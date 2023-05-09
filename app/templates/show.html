@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>TV Show Review - {{ show.title }}</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <header class="flex px-10 md:px-14 py-5">
+            <a href="/">
+                <img class="h-16 w-28" src="{{ url_for('static', filename='logo.svg') }}" alt="TV Show Review" />
+            </a>
+        </header>
+        <main class="flex flex-col px-10 md:px-14 py-5 gap-10">
+            <div class="flex flex-col lg:flex-row gap-16">
+                <img src="{{ show.thumbnail }}" class="lg:h-auto w-72 xl:w-96 object-scale-down rounded-lg self-center" />
+                <div>
+                    <div class="flex flex-row">
+                        <div>
+                            <p class="font-medium text-xl text-gray-500">{{ show.release_date }}</p>
+                            <p class="font-bold text-3xl md:text-5xl xl:text-7xl text-wrap break-all pb-5">{{ show.title }}</p>
+                            <div class="flex gap-2">
+                                {% for genre in show.genres %}
+                                    <div class="bg-gray-500 text-white rounded-lg py-1 px-2">
+                                        <p class="text-xl font-bold">
+                                            {{ genre.name }}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <button class="hidden md:flex bg-black text-white font-bold h-fit rounded-xl px-5 py-2 ml-auto items-center">
+                            <img src="{{ url_for('static', filename='download.svg') }}" class="h-5 w-5 mr-2" />
+                            <span>Export CSV</span>
+                        </button>
+                    </div>
+                    <div class="mt-10">
+                        <p class="font-bold text-xl">Summary</p>
+                        <p class="font-medium text-lg md:text-xl text-gray-500">{{ show.summary }}</p>
+                    </div>
+                    <div class="mt-10">
+                        <p class="font-bold text-xl">Analysis</p>
+                        <p class="font-medium text-lg md:text-xl text-gray-500">Overall Sentiment Score - {{ show.overall_score.name.capitalize() }}</p>
+                        <p class="font-medium text-lg md:text-xl text-gray-500">Positive - {{ positive_reviews }} reviews</p>
+                        <p class="font-medium text-lg md:text-xl text-gray-500">Negative - {{ negative_reviews }} reviews</p>
+                        <p class="font-medium text-lg md:text-xl text-gray-500">Neutral - {{ neutral_reviews }} reviews</p>
+                    </div>
+                    <button class="flex md:hidden bg-black text-white font-bold h-fit rounded-xl px-5 py-2 items-center mt-10">
+                        <img src="{{ url_for('static', filename='download.svg') }}" class="h-5 w-5 mr-2" />
+                        <span>Export CSV</span>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <div class="flex mb-5">
+                    <p class="font-bold text-2xl md:text-3xl w-auto">Top 5 Reviews</p>
+                    <a class="flex font-bold text-xl ml-auto items-center gap-2" href="/show/{{ show.id }}/reviews">
+                        <p>Review All</p>
+                        <img src="{{ url_for('static', filename='right-arrow.svg') }}" class="h-5 w-5" />
+                    </a>
+                </div>
+                <div class="flex flex-col gap-4">
+                    {% if show.reviews|length == 0 %}
+                        <p class="mt-5 font-medium text-xl md:text-2xl text-center">There are no available reviews</p>
+                    {% else %}
+                        {% for review in show.reviews[:5] %}
+                            <div class="flex border-gray-500 border-[3px] rounded-lg p-5 items-center">
+                                <div>
+                                    <!-- add icon here -->
+                                    <p class="font-medium text-lg text-gray-500">{{ review.created_by.name.capitalize() }} Review</p>
+                                    <p class="font-medium text-lg">{{ review.text }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
