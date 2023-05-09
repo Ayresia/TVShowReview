@@ -10,4 +10,7 @@ def create_app():
     from .show import show as show_blueprint
     app.register_blueprint(show_blueprint)
 
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+
     return app

@@ -1,3 +1,4 @@
+from requests import get
 from app.providers import get_metacritic_provider
 from app.database import db
 from enum import Enum
@@ -58,4 +59,19 @@ class Show(db.Model):
 
         db.session.commit()
         return show
+    
+    def search_show(self, query: str):
+        shows = db.session.query(Show).filter(Show.title.contains(query)).all()
 
+        if not shows:
+            shows = get_metacritic_provider().search_tv_shows(query)
+
+            if len(shows) == 0:
+                return []
+
+            for show in shows:
+                show_info = get_metacritic_provider().get_tv_show_info(show)
+                db.session.add(show_info)
+
+        db.session.commit()
+        return shows

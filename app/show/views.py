@@ -2,7 +2,7 @@ from flask import render_template
 from . import show
 from ..models import Show, ReviewScore
 
-@show.route('/<int:id>')
+@show.route("/<int:id>")
 def get_show(id):
     show = Show().get_show(id)
     
