@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>TV Show Review</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <header class="flex flex-col gap-5 items-center sm:gap-0 sm:flex-row px-10 md:px-14 py-5 justify-between sm:items-start">
+            <a href="/">
+                <img class="h-16 w-28" src="{{ url_for('static', filename='logo.svg') }}" alt="TV Show Review" />
+            </a>
+            <form action="/search" method="get">
+                <div class="relative w-auto sm:w-96">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg aria-hidden="true" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="search" name="query" class="block w-full p-4 pl-10 text-sm text-white border border-gray-300 rounded-lg bg-gray-500 placeholder-white font-medium focus:outline-none" placeholder="Search TV Show">
+                </div>
+            </form>
+        </header>
+        <main class="flex flex-col px-10 md:px-14 py-5 gap-10">
+            <p class="mt-5 font-medium text-xl md:text-2xl text-center">{{ message }}</p>
+        </main>
+    </body>
+</html>
