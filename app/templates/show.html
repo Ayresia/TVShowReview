@@ -42,10 +42,10 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <button class="hidden md:flex bg-black text-white font-bold h-fit rounded-xl px-5 py-2 ml-auto items-center">
+                        <a href="/show/{{ show.id }}/export" class="hidden md:flex bg-black text-white font-bold h-fit rounded-xl px-5 py-2 ml-auto items-center">
                             <img src="{{ url_for('static', filename='download.svg') }}" class="h-5 w-5 mr-2" />
                             <span>Export CSV</span>
-                        </button>
+                        </a>
                     </div>
                     <div class="mt-10">
                         <p class="font-bold text-xl">Summary</p>
@@ -58,10 +58,10 @@
                         <p class="font-medium text-lg md:text-xl text-gray-500">Negative - {{ negative_reviews }} reviews</p>
                         <p class="font-medium text-lg md:text-xl text-gray-500">Neutral - {{ neutral_reviews }} reviews</p>
                     </div>
-                    <button class="flex md:hidden bg-black text-white font-bold h-fit rounded-xl px-5 py-2 items-center mt-10">
+                    <a href="/show/{{ show.id }}/export" class="flex md:hidden bg-black text-white font-bold h-fit rounded-xl px-5 py-2 items-center mt-10">
                         <img src="{{ url_for('static', filename='download.svg') }}" class="h-5 w-5 mr-2" />
                         <span>Export CSV</span>
-                    </button>
+                    </a>
                 </div>
             </div>
             <div>

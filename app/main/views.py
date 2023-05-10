@@ -2,11 +2,11 @@ from app.models import Show
 from . import main
 from flask import render_template, request
 
-@main.route("/", methods=["GET"])
+@main.route("/")
 def index():
     return render_template("search.html")
 
-@main.route("/search", methods=["GET"])
+@main.route("/search")
 def search():
     query = str(request.args.get("query"))
     shows = Show().search_show(query)
