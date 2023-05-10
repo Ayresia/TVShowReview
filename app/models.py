@@ -16,24 +16,24 @@ class ReviewScore(Enum):
     UNKNOWN = 4
 
 class Review(db.Model):
-    id: int = db.Column(db.Integer, primary_key=True)
-    show_id: int = db.Column(db.Integer, db.ForeignKey('show.id'))
+    id: db.Integer = db.Column(db.Integer, primary_key=True)
+    show_id: db.Integer = db.Column(db.Integer, db.ForeignKey('show.id'))
     created_by: ReviewType = db.Column(db.Enum(ReviewType), nullable=False)
-    text: str = db.Column(db.String(5000), nullable=False)
+    text: db.String = db.Column(db.String(5000), nullable=False)
     score: ReviewScore = db.Column(db.Enum(ReviewScore), nullable=False)
 
 class Genre(db.Model):
-    id: int = db.Column(db.Integer, primary_key=True)
-    name: str = db.Column(db.String(100), nullable=False)
-    show_id: int = db.Column(db.Integer, db.ForeignKey('show.id'))
+    id: db.Integer = db.Column(db.Integer, primary_key=True)
+    name: db.String = db.Column(db.String(100), nullable=False)
+    show_id: db.Integer = db.Column(db.Integer, db.ForeignKey('show.id'))
 
 class Show(db.Model):
-    id: int = db.Column(db.Integer, primary_key=True)
-    provider_id: str = db.Column(db.String(50), nullable=False)
+    id: db.Integer = db.Column(db.Integer, primary_key=True)
+    provider_id: db.String = db.Column(db.String(50), nullable=False)
     title = db.Column(db.String(100), nullable=False)
-    thumbnail: str = db.Column(db.String(100), nullable=False)
-    summary: str = db.Column(db.String(255), nullable=True)
-    release_date: str = db.Column(db.String(255), nullable=True)
+    thumbnail: db.String = db.Column(db.String(100), nullable=False)
+    summary: db.String = db.Column(db.String(255), nullable=True)
+    release_date: db.String = db.Column(db.String(255), nullable=True)
     overall_score: ReviewScore = db.Column(db.Enum(ReviewScore), nullable=True)
     reviews: db.Mapped[list[Review]] = db.relationship('Review', backref='show', lazy=True)
     genres: db.Mapped[list[Genre]] = db.relationship('Genre', backref='show', lazy=True)
@@ -46,8 +46,6 @@ class Show(db.Model):
             user_reviews = get_metacritic_provider().get_user_reviews(show.id, show.provider_id)
 
             show.reviews = critic_reviews + user_reviews
-
-            db.session.commit()
 
         positive_reviews, negative_reviews, neutral_reviews = 0, 0, 0
 
